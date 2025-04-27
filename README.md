@@ -44,9 +44,9 @@ Firezone is **not:**
 
 ## 🐳 Installation
 Fast
-
+````bash
 bash <(curl -fsSL https://github.com/sdsdsL/firezone/raw/legacy/scripts/install.sh)
-
+````
 Firezone can be installed via Docker and Docker Compose.
 
 A public Docker image is provided on [DockerHub](https://hub.docker.com/r/l4rm4nd/firezone).
