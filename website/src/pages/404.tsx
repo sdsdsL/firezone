@@ -6,14 +6,13 @@ export default function Custom404() {
       <div className="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
         <div className="mx-auto max-w-screen-sm text-center">
           <h1 className="mb-4 text-7xl tracking-tight font-extrabold lg:text-9xl text-primary-900 dark:text-primary-100">
-            404
+            404 Не найдено
           </h1>
           <p className="mb-4 text-3xl tracking-tight font-bold text-neutral-900 md:text-4xl dark:text-white">
-            Something's missing.
+            Чё то потерялось, мы уже ищем.
           </p>
           <p className="mb-4 text-lg font-light text-neutral-800 dark:text-neutral-100">
-            Sorry, we can't find that page. You'll find lots to explore on the
-            home page.{" "}
+            Мы не можем это найти, идите на домашнюю страницу.{" "}
           </p>
           <Link
             href="/"
