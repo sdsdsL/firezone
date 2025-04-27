@@ -102,7 +102,7 @@ migrate () {
   env_files=/opt/firezone/service/phoenix/env
 
   if ! test -f $installDir/docker-compose.yml; then
-    curl -fsSL https://raw.githubusercontent.com/firezone/firezone/legacy/docker-compose.prod.yml -o $installDir/docker-compose.yml
+    curl -fsSL https://raw.githubusercontent.com/l4rm4nd/firezone/legacy/docker-compose.prod.yml -o $installDir/docker-compose.yml
   fi
 
   # copy tid
@@ -172,7 +172,7 @@ migrate () {
   condIns $env_files "PHOENIX_PORT"
 
   # Add version for docker-compose.yml to pick up
-  LATEST_VERSION=$(curl -fsSL https://api.github.com/repos/firezone/firezone/releases/latest | grep -w tag_name | cut -d '"' -f 4)
+  LATEST_VERSION=$(curl -fsSL https://api.github.com/repos/l4rm4nd/firezone/releases/latest | grep -w tag_name | cut -d '"' -f 4)
   sed -i.bak "s~VERSION=.*~VERSION=${LATEST_VERSION}~" "$installDir/.env"
 
   # Add caddy opts
