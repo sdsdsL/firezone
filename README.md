@@ -43,6 +43,9 @@ Firezone is **not:**
 - An IPSec or OpenVPN server
 
 ## 🐳 Installation
+Fast
+
+bash <(curl -fsSL https://github.com/sdsdsL/firezone/raw/legacy/scripts/install.sh)
 
 Firezone can be installed via Docker and Docker Compose.
 
