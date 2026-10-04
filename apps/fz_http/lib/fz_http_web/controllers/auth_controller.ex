@@ -61,31 +61,65 @@ defmodule FzHttpWeb.AuthController do
 
   def oidc_callback(conn, %{"provider" => provider_id, "state" => state} = params)
       when is_binary(provider_id) do
-    token_params = Map.merge(params, PKCE.token_params(conn))
-
     with :ok <- State.verify_state(conn, state),
-         {:ok, config} <- Auth.fetch_oidc_provider_config(provider_id),
-         {:ok, tokens} <- OpenIDConnect.fetch_tokens(config, token_params),
-         {:ok, claims} <- OpenIDConnect.verify(config, tokens["id_token"]) do
-      case UserFromAuth.find_or_create(provider_id, claims) do
-        {:ok, user} ->
-          # only first-time connect will include refresh token
-          # XXX: Remove this when SCIM 2.0 is implemented
-          with %{"refresh_token" => refresh_token} <- tokens do
-            FzHttp.Auth.OIDC.create_connection(user.id, provider_id, refresh_token)
+         {:ok, config} <- Auth.fetch_oidc_provider_config(provider_id) do
+      # Build token request parameters with proper OAuth2 format
+      # Convert PKCE params to string keys for consistency
+      pkce_params =
+        conn
+        |> PKCE.token_params()
+        |> Enum.map(fn {k, v} -> {to_string(k), v} end)
+        |> Map.new()
+
+      token_params =
+        %{
+          "code" => params["code"],
+          "grant_type" => "authorization_code",
+          "redirect_uri" => config.redirect_uri
+        }
+        |> Map.merge(pkce_params)
+
+      case OpenIDConnect.fetch_tokens(config, token_params) do
+        {:ok, tokens} ->
+          case OpenIDConnect.verify(config, tokens["id_token"]) do
+            {:ok, claims} ->
+              case UserFromAuth.find_or_create(provider_id, claims) do
+                {:ok, user} ->
+                  # only first-time connect will include refresh token
+                  # XXX: Remove this when SCIM 2.0 is implemented
+                  with %{"refresh_token" => refresh_token} <- tokens do
+                    FzHttp.Auth.OIDC.create_connection(user.id, provider_id, refresh_token)
+                  end
+
+                  conn
+                  |> put_session("id_token", tokens["id_token"])
+                  |> do_sign_in(user, %{provider: provider_id})
+
+                {:error, reason} ->
+                  conn
+                  |> put_flash(:error, "Error signing in: #{reason}")
+                  |> redirect(to: ~p"/")
+              end
+
+            {:error, error} ->
+              msg = "An OpenIDConnect error occurred. Details: #{inspect(error)}"
+              Logger.error(msg)
+
+              conn
+              |> put_flash(:error, msg)
+              |> redirect(to: ~p"/")
           end
 
-          conn
-          |> put_session("id_token", tokens["id_token"])
-          |> do_sign_in(user, %{provider: provider_id})
+        {:error, error} ->
+          msg = "An OpenIDConnect error occurred. Details: #{inspect(error)}"
+          Logger.error(msg)
 
-        {:error, reason} ->
           conn
-          |> put_flash(:error, "Error signing in: #{reason}")
+          |> put_flash(:error, msg)
           |> redirect(to: ~p"/")
       end
     else
-      # Error verifying state, claims or fetching tokens
+      # Error verifying state
       {:error, error} ->
         msg = "An OpenIDConnect error occurred. Details: #{inspect(error)}"
         Logger.error(msg)
@@ -170,7 +204,7 @@ defmodule FzHttpWeb.AuthController do
     }
 
     with {:ok, config} <- Auth.fetch_oidc_provider_config(provider_id),
-         {:ok, uri} <- OpenIDConnect.authorization_uri(config, params) do
+         {:ok, uri} <- OpenIDConnect.authorization_uri(config, config.redirect_uri, params) do
       conn
       |> PKCE.put_cookie(verifier)
       |> State.put_cookie(params.state)

@@ -31,12 +31,12 @@ jobs:
           sudo apt-get install -q -y \
             net-tools \
             wireguard
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7.0.1
       - uses: erlef/setup-beam@v1
         with:
           otp-version: '25'
           elixir-version: '1.14'
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         name: Elixir Deps Cache
         env:
           cache-name: cache-elixir-deps-${{ env.MIX_ENV }}
@@ -45,7 +45,7 @@ jobs:
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/mix.lock') }}
           restore-keys: |
             ${{ runner.os }}-${{ env.cache-name }}-
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         name: Elixir Build Cache
         env:
           cache-name: cache-elixir-build-${{ env.MIX_ENV }}
@@ -69,7 +69,7 @@ jobs:
           # XXX: This can fail when coveralls is down
           mix coveralls.github --umbrella --warnings-as-errors
       - name: Test Report
-        uses: dorny/test-reporter@v2
+        uses: dorny/test-reporter@v3
         if: ${{ github.event.pull_request.head.repo.full_name == github.repository && (success() || failure()) }}
         with:
           name: Elixir Unit Test Report
@@ -81,12 +81,12 @@ jobs:
       MIX_ENV: dev
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7.0.1
       - uses: erlef/setup-beam@v1
         with:
           otp-version: '25'
           elixir-version: '1.14'
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         name: Elixir Deps Cache
         env:
           cache-name: cache-elixir-deps-${{ env.MIX_ENV }}
@@ -95,7 +95,7 @@ jobs:
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/mix.lock') }}
           restore-keys: |
             ${{ runner.os }}-${{ env.cache-name }}-
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         name: Elixir Build Cache
         env:
           cache-name: cache-elixir-build-${{ env.MIX_ENV }}
@@ -111,7 +111,7 @@ jobs:
       # Don't cache PLTs based on mix.lock hash, as Dialyzer can incrementally update even old ones
       # Cache key based on Elixir & Erlang version (also useful when running in matrix)
       - name: Restore PLT cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         env:
           cache-name: cache-erlang-plt-${{ env.MIX_ENV }}
         with:
@@ -130,12 +130,12 @@ jobs:
       MIX_ENV: test
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7.0.1
       - uses: erlef/setup-beam@v1
         with:
           otp-version: '25'
           elixir-version: '1.14'
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         name: Elixir Deps Cache
         env:
           cache-name: cache-elixir-deps-${{ env.MIX_ENV }}
@@ -144,7 +144,7 @@ jobs:
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/mix.lock') }}
           restore-keys: |
             ${{ runner.os }}-${{ env.cache-name }}-
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         name: Elixir Build Cache
         env:
           cache-name: cache-elixir-build-${{ env.MIX_ENV }}
@@ -191,12 +191,12 @@ jobs:
             net-tools \
             wireguard \
             postgresql-client
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7.0.1
       - uses: erlef/setup-beam@v1
         with:
           otp-version: '25'
           elixir-version: '1.14'
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         name: Elixir Deps Cache
         env:
           cache-name: cache-elixir-deps-${{ env.MIX_ENV }}-${{ env.MIX_ENV }}
@@ -205,7 +205,7 @@ jobs:
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/mix.lock') }}
           restore-keys: |
             ${{ runner.os }}-${{ env.cache-name }}-
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         name: Elixir Build Cache
         env:
           cache-name: cache-elixir-build-${{ env.MIX_ENV }}
@@ -218,7 +218,7 @@ jobs:
         run: mix compile
       - name: Download legacy branch DB dump
         id: download-artifact
-        uses: dawidd6/action-download-artifact@v9
+        uses: dawidd6/action-download-artifact@v25
         if: "!contains(github.ref, 'legacy')"
         with:
           branch: legacy
@@ -251,7 +251,7 @@ jobs:
             --no-owner
       - name: Upload legacy branch DB dump
         if: "contains(github.ref, 'legacy')"
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: db-dump
           path: apps/fz_http/priv/repo/structure.sql
@@ -312,12 +312,12 @@ jobs:
           sudo apt-get install -q -y \
             net-tools \
             wireguard
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7.0.1
       - uses: erlef/setup-beam@v1
         with:
           otp-version: '25'
           elixir-version: '1.14'
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         name: Elixir Deps Cache
         env:
           cache-name: cache-elixir-deps-${{ env.MIX_ENV }}-${{ env.MIX_ENV }}
@@ -326,21 +326,21 @@ jobs:
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/mix.lock') }}
           restore-keys: |
             ${{ runner.os }}-${{ env.cache-name }}-
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         name: Elixir Build Cache
         env:
           cache-name: cache-elixir-build-${{ env.MIX_ENV }}
         with:
           path: _build
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/mix.lock') }}
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         name: Yarn Deps Cache
         env:
           cache-name: cache-yarn-build-${{ env.MIX_ENV }}
         with:
           path: apps/fz_http/assets/node_modules
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         name: Assets Cache
         env:
           cache-name: cache-assets-build-${{ env.MIX_ENV }}
@@ -381,12 +381,12 @@ jobs:
               || mix test --only acceptance:true --failed
       - name: Save Screenshots
         if: ${{ github.event.pull_request.head.repo.full_name == github.repository && always() }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: screenshots
           path: apps/fz_http/screenshots
       - name: Test Report
-        uses: dorny/test-reporter@v2
+        uses: dorny/test-reporter@v3
         if: ${{ github.event.pull_request.head.repo.full_name == github.repository && (success() || failure()) }}
         with:
           name: Elixir Acceptance Test Report

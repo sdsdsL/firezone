@@ -1,35 +1,35 @@
-## [7.0.14](https://github.com/l4rm4nd/firezone/compare/v7.0.13...v7.0.14) (2025-04-16)
+## [7.2.22](https://github.com/l4rm4nd/firezone/compare/v7.2.21...v7.2.22) (2026-09-14)
 
 
 ### Bug Fixes
 
-* trigger ci ([cbeaa3c](https://github.com/l4rm4nd/firezone/commit/cbeaa3cb9dfa26ac009a835863f17e5e1027b98b))
+* bump libs ([7b74771](https://github.com/l4rm4nd/firezone/commit/7b74771da9774848921760f22a6f42504ad83640))
 
-## [7.0.13](https://github.com/l4rm4nd/firezone/compare/v7.0.12...v7.0.13) (2025-03-25)
-
-
-### Bug Fixes
-
-* trigger ci to fix nextjs cve ([6da3738](https://github.com/l4rm4nd/firezone/commit/6da3738609c25487b9c0a9dffd00f9f0e46a4a3a))
-
-## [7.0.12](https://github.com/l4rm4nd/firezone/compare/v7.0.11...v7.0.12) (2025-03-11)
+## [7.2.21](https://github.com/l4rm4nd/firezone/compare/v7.2.20...v7.2.21) (2026-09-11)
 
 
 ### Bug Fixes
 
-* Trigger ci ([f44bed3](https://github.com/l4rm4nd/firezone/commit/f44bed34a791efd5af132ff0b7cf93a38070db7b))
+* trigger ci ([53deeec](https://github.com/l4rm4nd/firezone/commit/53deeec61c929d9c4afecf28074e1136c2d707fd))
 
-## [7.0.11](https://github.com/l4rm4nd/firezone/compare/v7.0.10...v7.0.11) (2025-02-25)
-
-
-### Bug Fixes
-
-* trigger ci ([5fa15d8](https://github.com/l4rm4nd/firezone/commit/5fa15d88cfd7007229b3860c2f634fc95c96e22a))
-
-## [7.0.10](https://github.com/l4rm4nd/firezone/compare/v7.0.9...v7.0.10) (2025-02-25)
+## [7.2.20](https://github.com/l4rm4nd/firezone/compare/v7.2.19...v7.2.20) (2026-09-04)
 
 
 ### Bug Fixes
 
-* trigger ci ([c8112a3](https://github.com/l4rm4nd/firezone/commit/c8112a3f8257d73878019342b43d80eef88e3c29))
+* trigger ci ([952da2a](https://github.com/l4rm4nd/firezone/commit/952da2af3c98643a6559b0f2a6ab711bf28fa162))
+
+## [7.2.19](https://github.com/l4rm4nd/firezone/compare/v7.2.18...v7.2.19) (2026-09-04)
+
+
+### Bug Fixes
+
+* trigger ci ([b035e9c](https://github.com/l4rm4nd/firezone/commit/b035e9ca9c86eeb85d93c06da17b6a2a16254ced))
+
+## [7.2.18](https://github.com/l4rm4nd/firezone/compare/v7.2.17...v7.2.18) (2026-08-09)
+
+
+### Bug Fixes
+
+* trigger ci ([f98ba14](https://github.com/l4rm4nd/firezone/commit/f98ba14a94b6919301df7b4cc5d8385b65b1cdf7))
 

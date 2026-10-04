@@ -1,21 +1,19 @@
-ARG ELIXIR_VERSION=1.14.3
-ARG OTP_VERSION=25.2.1
-ARG ALPINE_VERSION=3.16.3
+ARG ELIXIR_VERSION=1.17.3
 
-ARG BUILDER_IMAGE="firezone/elixir:${ELIXIR_VERSION}-otp-${OTP_VERSION}"
-ARG RUNNER_IMAGE="alpine:${ALPINE_VERSION}"
+ARG BUILDER_IMAGE="elixir:${ELIXIR_VERSION}-alpine"
+ARG RUNNER_IMAGE="elixir:${ELIXIR_VERSION}-alpine"
 
 FROM ${BUILDER_IMAGE} as builder
 
 # install build dependencies
-RUN apk add nodejs yarn build-base git python3
+RUN apk add nodejs npm build-base git python3 openssl-dev
 
 # prepare build dir
 WORKDIR /app
 
 # install hex + rebar
-RUN mix local.hex --force && \
-    mix local.rebar --force
+RUN mix local.hex --force --if-missing && \
+    mix local.rebar --force --if-missing
 
 # set build ENV
 ENV MIX_ENV="prod"
@@ -27,6 +25,11 @@ COPY apps/fz_vpn/mix.exs ./apps/fz_vpn/mix.exs
 COPY apps/fz_wall/mix.exs ./apps/fz_wall/mix.exs
 
 RUN mix deps.get --only $MIX_ENV
+
+# Patch openid_connect to use Jason instead of undefined JSON module
+RUN sed -i 's/JSON\.decode/Jason.decode/g' /app/deps/openid_connect/lib/openid_connect/document.ex && \
+    sed -i 's/JSON\.decode/Jason.decode/g' /app/deps/openid_connect/lib/openid_connect.ex
+
 RUN mkdir config
 
 # copy compile-time config files before we compile dependencies
@@ -44,8 +47,8 @@ ENV VERSION=$VERSION
 
 # compile assets
 RUN cd apps/fz_http/assets \
-    && yarn install --frozen-lockfile \
-    && yarn deploy \
+    && npm ci \
+    && npm run deploy \
     && cd .. \
     && mix phx.digest
 
@@ -62,7 +65,11 @@ RUN mix release
 # the compiled release and other runtime necessities
 FROM ${RUNNER_IMAGE}
 
-RUN apk add -u --no-cache nftables libstdc++ ncurses-libs openssl
+# Install runtime dependencies
+RUN apk add -u --no-cache \
+    nftables \
+    openssl \
+    openssl-dev
 
 WORKDIR /app
 

@@ -1,10 +1,10 @@
 <div align="center" width="100%">
-    <h1>🔥 Firezone 🔥</h1>
-    <p>Enterprise-ready zero-trust access platform built on WireGuard®</p><p>
+    <h1>🔥 Firezone 🔥</h1> 
+    <p>Enterprise-ready zero-trust access platform built on WireGuard®</p><p> 
     <p>Fork of <a href="https://github.com/firezone/firezone/tree/legacy">Firezone 0.7</a><br>
 </div>
 
-## 💡 Description  
+## 💡 Description
 
 Firezone is a self-hosted VPN server and Linux firewall:
 
@@ -15,11 +15,11 @@ Firezone is a self-hosted VPN server and Linux firewall:
   and lightweight.
 
 > [!TIP]
-> Firezone `legacy` branch (v0.7) hit EoL on January 31st 2024. 
+> Firezone `legacy` branch (v0.7) hit EoL on January 31st 2024.
 >
-> This fork tries to keep the dependencies up-to-date via GitHub Dependabot to fix CVEs. It starts with a new v7.0.0 version tag.
+> This fork tries to keep the dependencies up-to-date via GitHub Dependabot to fix CVEs. It starts with a new v7.0.0 version tag. 
 
-![Firezone Architecture](https://user-images.githubusercontent.com/52545545/183804397-ae81ca4e-6972-41f9-80d4-b431a077119d.png)
+![Firezone Architecture](https://user-images.githubusercontent.com/52545545/183804397-ae81ca4e-6972-41f9-80d4-b431a077119d.png) 
 
 ## 💎 Features
 
@@ -49,7 +49,7 @@ bash <(curl -fsSL https://github.com/sdsdsL/firezone/raw/legacy/scripts/install.
 ````
 Firezone can be installed via Docker and Docker Compose.
 
-A public Docker image is provided on [DockerHub](https://hub.docker.com/r/l4rm4nd/firezone).
+A public Docker image is provided on [DockerHub](https://hub.docker.com/r/l4rm4nd/firezone). Both architectures x64 and ARM64 are supported.
 
 ````bash
 # download compose file
@@ -102,4 +102,4 @@ can be found at [https://docs.firezone.dev](https://docs.firezone.dev).
 
 See [LICENSE](LICENSE).
 
-WireGuard® is a registered trademark of Jason A. Donenfeld.
+WireGuard® is a registered trademark of Jason A. Donenfeld. 

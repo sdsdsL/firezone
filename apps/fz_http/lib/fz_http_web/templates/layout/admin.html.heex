@@ -79,13 +79,33 @@
         </div>
       </nav>
 
+      <%= if !is_nil(Phoenix.Flash.get(@flash, :info)) or !is_nil(Phoenix.Flash.get(@flash, :error)) do %>
+        <div class="block flash-squeeze">
+          <%= if Phoenix.Flash.get(@flash, :info) do %>
+            <div class="notification is-info">
+              <button class="delete"></button>
+              <div class="flash-info">
+                <%= Phoenix.Flash.get(@flash, :info) %>
+              </div>
+            </div>
+          <% end %>
+          <%= if Phoenix.Flash.get(@flash, :error) do %>
+            <div class="notification is-danger">
+              <button class="delete"></button>
+              <div class="flash-error">
+                <%= Phoenix.Flash.get(@flash, :error) %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+
       <%= @inner_content %>
 
       <footer class="footer">
         <div class="container-fluid">
           <div class="level">
-            <div class="level-left">
-            </div>
+            <div class="level-left"></div>
             <div class="level-right">
               <div class="level-item">
                 <a href={"https://github.com/l4rm4nd/firezone/releases/tag/v#{application_version()}"}>
