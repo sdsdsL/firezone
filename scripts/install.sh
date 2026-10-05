@@ -1,32 +1,6 @@
 #!/bin/bash
 set -e
 
-dockerCheck () {
-  if ! type docker > /dev/null; then
-    echo "docker not found. Please install docker and try again."
-    exit 1
-  fi
-
-  if command docker compose &> /dev/null; then
-    dc="docker compose"
-  else
-    if command -v docker-compose &> /dev/null; then
-      dc="docker-compose"
-    else
-      echo "Error: Docker Compose not found. Please install Docker Compose version 2 or higher."
-      exit 1
-    fi
-  fi
-
-  set +e
-  $dc version | grep -q "v5"
-  if [ $? -ne 0 ]; then
-    echo "Error: Automatic installation is only supported with Docker Compose version 2 or higher."
-    echo "Please upgrade Docker Compose or use the manual installation method: https://docs.firezone.dev/deploy/docker"
-    exit 1
-  fi
-  set -e
-}
 
 curlCheck () {
   if ! type curl > /dev/null; then
