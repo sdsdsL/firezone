@@ -1,6 +1,32 @@
 #!/bin/bash
 set -e
 
+dockerCheck () {
+  if ! type docker > /dev/null; then
+    echo "docker not found. Please install docker and try again."
+    exit 1
+  fi
+
+  if command docker compose &> /dev/null; then
+    dc="docker compose"
+  else
+    if command -v docker-compose &> /dev/null; then
+      dc="docker-compose"
+    else
+      echo "Error: Docker Compose not found. Please install Docker Compose version 2 or higher."
+      exit 1
+    fi
+  fi
+
+  set +e
+  $dc version | grep -q "v5"
+  if [ $? -ne 0 ]; then
+    echo "Error: Automatic installation is only supported with Docker Compose version 5 or higher."
+    echo "Please upgrade Docker Compose or use the manual installation method: https://docs.firezone.dev/deploy/docker"
+    exit 1
+  fi
+  set -e
+}
 
 curlCheck () {
   if ! type curl > /dev/null; then
@@ -96,10 +122,10 @@ firezoneSetup() {
         file=docker-compose.desktop.yml
         ;;
     esac
-    curl -fsSL https://raw.githubusercontent.com/l4rm4nd/firezone/legacy/$file -o $installDir/docker-compose.yml
+    curl -fsSL https://raw.githubusercontent.com/firezone/firezone/legacy/$file -o $installDir/docker-compose.yml
   fi
   db_pass=$(od -vN "8" -An -tx1 /dev/urandom | tr -d " \n" ; echo)
-  docker run --rm l4rm4nd/firezone bin/gen-env > "$installDir/.env"
+  docker run --rm firezone/firezone bin/gen-env > "$installDir/.env"
   sed -i.bak "s/DEFAULT_ADMIN_EMAIL=.*/DEFAULT_ADMIN_EMAIL=$1/" "$installDir/.env"
   sed -i.bak "s~EXTERNAL_URL=.*~EXTERNAL_URL=$2~" "$installDir/.env"
   sed -i.bak "s/DATABASE_PASSWORD=.*/DATABASE_PASSWORD=$db_pass/" "$installDir/.env"
@@ -188,6 +214,7 @@ main() {
   firezoneSetup $adminUser $externalUrl
 }
 
+dockerCheck
 curlCheck
 
 telemetry_id=$(od -vN "8" -An -tx1 /dev/urandom | tr -d " \n" ; echo)
