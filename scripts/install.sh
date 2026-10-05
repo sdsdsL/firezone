@@ -188,7 +188,6 @@ main() {
   firezoneSetup $adminUser $externalUrl
 }
 
-dockerCheck
 curlCheck
 
 telemetry_id=$(od -vN "8" -An -tx1 /dev/urandom | tr -d " \n" ; echo)
